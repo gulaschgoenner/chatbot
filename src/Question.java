@@ -4,9 +4,20 @@ public class Question {
     private String question;
     private List<Answer> answers;
 
-    public Question(String question, List<Answer> answers) {
+    public String getPrerequisite() {
+        return prerequisite;
+    }
+
+    public void setPrerequisite(String prerequisite) {
+        this.prerequisite = prerequisite;
+    }
+
+    private String prerequisite;
+
+    public Question(String question, List<Answer> answers, String prerequesite) {
         this.question = question;
         this.answers = answers;
+        this.prerequisite = prerequesite;
     }
 
     public String getQuestion() {

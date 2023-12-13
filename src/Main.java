@@ -9,13 +9,42 @@ public class Main {
                     List.of(
                             new Answer("hardware", List.of("hardware")),
                             new Answer("software", List.of("software"))
-                    )),
+                    ),
+                    null),
             new Question("Verwendest du Windows oder Linux?",
                     List.of(
                             new Answer("linux", List.of("linux")),
-                            new Answer("windows", List.of("windows"))
-                    )));
-    private static List<String> prevAnswers = new ArrayList<>();
+                            new Answer("windows", List.of("windows", "microsoft"))
+                    ),
+                    "software"),
+            new Question("Gibt es Probleme mit dem Monitor oder einem anderen Teil?",
+                    List.of(
+                            new Answer("monitor", List.of("monitor", "bildschirm")),
+                            new Answer("anderes-pc-teil", List.of("GPU", "CPU", "andere", "PSU", "Prozessor", "Grafik", "Mainboard", "Motherboard"))
+                    ),
+                    "hardware"),
+            new Question("Raucht es?",
+                    List.of(
+                            new Answer("rauch-ja", Utils.ja),
+                            new Answer("rauch-nein", Utils.nein)
+                    ),
+                    "anderes-pc-teil"),
+            new Question("Beschreibe das Problem deines Bildschirms etwas genauer.",
+                    List.of(
+                            new Answer("flackern", List.of("flacker")),
+                            new Answer("bild-gestoppt", List.of("stop", "standbild")),
+                            new Answer("schwarzbild", List.of("dunkel", "schwarz"))
+                    ),
+                    "anderes-pc-teil"),
+            new Question("Bei welcher Software tritt das Problem auf?",
+                    List.of(
+                            new Answer("browser", List.of("Chrome", "Firefox", "Browser", "Edge", "Internet Explorer", "Opera")),
+                            new Answer("mc-office", List.of("Word", "Excel", "Powerpoint", "Outlook", "Office", "365")),
+                            new Answer("andere-software", List.of("andere", "keine"))
+                    ),
+                    "windows")
+    );
+    private static final List<String> prevAnswers = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -26,6 +55,18 @@ public class Main {
 
         while (true) {
             respond(scanner);
+            if (layers.size() <= prevAnswers.size()) {
+                getSolutions();
+                System.out.println("Hast du ein weiteres Problem?");
+                String userResponse = getUserMessage(scanner);
+
+                if (messageContainsFromList(userResponse, Utils.ja)) {
+                    resetConversation();
+                } else {
+                    System.out.println("Chatbot: Tschüss! Bis zum nächsten Mal, " + userName + "!");
+                    break;
+                }
+            }
         }
     }
 
@@ -56,18 +97,13 @@ public class Main {
             prevAnswers.add(getAnswer(userMessage, layers.get(layer).getAnswers()));
             layer++;
         }
-
-        if (layers.size() <= prevAnswers.size()) {
-            getSolutions();
-            System.exit(0);  // Terminate the program after providing solutions
-        }
     }
 
     private static String getAnswer(String input, List<Answer> answers) {
         if (input == null) {
             return null;
         }
-        return answers.stream().filter(answer -> answer.getKeywords().stream().anyMatch(s -> Utils.messageContains(input, s))).map(Answer::getAnswer).findFirst().orElse(null);
+        return answers.stream().filter(answer -> answer.getKeywords().stream().anyMatch(s -> messageContains(input, s))).map(Answer::getAnswer).findFirst().orElse(null);
     }
 
     private static String getUserMessage(Scanner scanner) {
@@ -78,24 +114,21 @@ public class Main {
         }
 
         String finalUserMessage = userMessage;
-        if (Utils.verabschiedungen.stream().anyMatch(s -> Utils.messageContains(s, finalUserMessage))) {
+        if (Utils.verabschiedungen.stream().anyMatch(s -> messageContains(finalUserMessage, s))) {
             System.out.println("Chatbot: Tschüss! Bis zum nächsten Mal, " + userName + "!");
         }
         return userMessage;
     }
 
-    private static void respondToUser(String userMessage) {
-        userMessage = userMessage.trim();
-        if (Utils.messageContains(userMessage, "hallo")) {
-            System.out.println("Chatbot: Hallo! Wie geht es dir?");
-        } else if (Utils.messageContains(userMessage, "gut")) {
-            System.out.println("Chatbot: Das freut mich zu hören!");
-        } else if (Utils.messageContains(userMessage, "schlecht")) {
-            System.out.println("Chatbot: Das tut mir leid. Was kann ich für dich tun?");
-        } else if (Utils.messageContains(userMessage, "Wetter")) {
-            System.out.println("Chatbot: Das Wetter ist heute schön!");
-        } else {
-            System.out.println("Chatbot: Entschuldigung, ich habe dich nicht verstanden. Kannst du das bitte wiederholen?");
-        }
+    public static boolean messageContains(String msg, String str2) {
+        return msg.toLowerCase().trim().contains(str2.trim().toLowerCase());
+    }
+
+    private static boolean messageContainsFromList(String userMessage, List<String> keywords) {
+        return keywords.stream().anyMatch(kw -> messageContains(userMessage, kw));
+    }
+
+    private static void resetConversation() {
+        prevAnswers.clear();
     }
 }
