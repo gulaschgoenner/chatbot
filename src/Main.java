@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -35,7 +36,7 @@ public class Main {
                             new Answer("bild-gestoppt", List.of("stop", "standbild")),
                             new Answer("schwarzbild", List.of("dunkel", "schwarz"))
                     ),
-                    "anderes-pc-teil"),
+                    "monitor"),
             new Question("Bei welcher Software tritt das Problem auf?",
                     List.of(
                             new Answer("browser", List.of("Chrome", "Firefox", "Browser", "Edge", "Internet Explorer", "Opera")),
@@ -54,49 +55,59 @@ public class Main {
         System.out.println("Hallo " + userName + "!");
 
         while (true) {
-            respond(scanner);
-            if (layers.size() <= prevAnswers.size()) {
-                getSolutions();
-                System.out.println("Hast du ein weiteres Problem?");
-                String userResponse = getUserMessage(scanner);
+            askQuestions(scanner);
+            getSolutions();
+            System.out.println("Hast du ein weiteres Problem?");
+            String userResponse = getUserMessage(scanner);
 
-                if (messageContainsFromList(userResponse, Utils.ja)) {
-                    resetConversation();
-                } else {
-                    System.out.println("Chatbot: Tschüss! Bis zum nächsten Mal, " + userName + "!");
-                    break;
-                }
+            if (messageContainsFromList(userResponse, Utils.ja)) {
+                resetConversation();
+            } else {
+                System.out.println("Chatbot: Tschüss! Bis zum nächsten Mal, " + userName + "!");
+                break;
             }
+
         }
     }
 
     private static void getSolutions() {
+        // TODO
         System.out.println(prevAnswers);
-        // Implement the logic to return solutions based on prevAnswers
+        System.out.println("Starte das Gerät neu.");
     }
 
-    private static void respond(Scanner scanner) {
-        int layer = prevAnswers.size();
+    private static void askQuestions(Scanner scanner) {
+        int question = prevAnswers.size();
 
-        while (layers.size() > layer) {
-            System.out.println("Chatbot: " + layers.get(layer).getQuestion());
+        while (layers.size() > question) {
+            if (checkPrerequisite(layers.get(question).getPrerequisite())) {
+                System.out.println("Chatbot: " + layers.get(question).getQuestion());
 
-            // Check if the current layer has been answered
-            if (layer < prevAnswers.size()) {
-                layer++;
-                continue;  // Skip to the next layer
+                if (question < prevAnswers.size()) {
+                    question++;
+                    continue;
+                }
+
+                String userMessage = getUserMessage(scanner);
+
+                while (getAnswer(userMessage, layers.get(question).getAnswers()) == null) {
+                    System.out.println("Chatbot: Bitte gib eine genauere Antwort.");
+                    userMessage = getUserMessage(scanner);
+                }
+
+                prevAnswers.add(getAnswer(userMessage, layers.get(question).getAnswers()));
+                question++;
+            } else {
+                question++;
             }
-
-            String userMessage = getUserMessage(scanner);
-
-            while (getAnswer(userMessage, layers.get(layer).getAnswers()) == null) {
-                System.out.println("Chatbot: Bitte gib eine genauere Antwort.");
-                userMessage = getUserMessage(scanner);
-            }
-
-            prevAnswers.add(getAnswer(userMessage, layers.get(layer).getAnswers()));
-            layer++;
         }
+    }
+
+    private static boolean checkPrerequisite(String prerequisite) {
+        if (prerequisite == null || prevAnswers.size() == 0) {
+            return true;
+        }
+        return Objects.equals(prevAnswers.get(prevAnswers.size() - 1), prerequisite);
     }
 
     private static String getAnswer(String input, List<Answer> answers) {
