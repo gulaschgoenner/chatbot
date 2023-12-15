@@ -6,44 +6,102 @@ import java.util.Scanner;
 public class Main {
     private static String userName;
     public static List<Question> layers = List.of(
-            new Question("Handelt es sich um ein Hardware- oder Softwareproblem?",
+            new Question("Benutzt du einen Laptop oder einen Desktop-PC?",
+                    List.of(
+                            new Answer("laptop", List.of("laptop", "notebook")),
+                            new Answer("desktop", List.of("desktop", "pc", "computer"))
+                    ),
+                    null),
+            new Question("Ist dein Problem mit der Hardware oder der Software verbunden?",
                     List.of(
                             new Answer("hardware", List.of("hardware")),
                             new Answer("software", List.of("software"))
                     ),
-                    null),
+                    "laptop"),
+            new Question("Ist dein Problem mit der Hardware oder der Software verbunden?",
+                    List.of(
+                            new Answer("hardware", List.of("hardware")),
+                            new Answer("software", List.of("software"))
+                    ),
+                    "desktop"),
+            new Question("Funktioniert das Gerät nicht mehr seit du neue Hardware eingebaut hast?",
+                    List.of(
+                            new Answer("ja-neue-hardware", Utils.ja),
+                            new Answer("nein-neue-hardware", Utils.nein) //ende
+                    ),
+                    "hardware"),
+            new Question("Hat dein Computer ungewöhnliche Geräusche gemacht?",
+                    List.of(
+                            new Answer("ja-geraeusche", Utils.ja), //ende
+                            new Answer("nein-geraeusche", Utils.nein)
+                    ),
+                    "nein-neue-hardware"),
+            new Question("Wird nicht das richtige Bild auf dem Monitor angezeigt, obwohl das angeschlossene Gerät eingeschaltet ist?",
+                    List.of(
+                            new Answer("monitor", Utils.ja),
+                            new Answer("andere-pc-teile", Utils.nein)
+                    ),
+                    "nein-geraeusche"),
+            new Question("Beschreibe dein Problem genauer? Was wird auf dem Monitor angezeigt.",
+                    List.of(
+                            new Answer("flackern", List.of("flacker")), //ende
+                            new Answer("bild-gestoppt", List.of("stop", "standbild")),//ende
+                            new Answer("schwarzbild", List.of("dunkel", "schwarz"))//ende
+                    ),
+                    "monitor"),
+            new Question("Weißt du, welches Teil den Fehler verursacht?",
+                    List.of(
+                            new Answer("fehlerteil-bekannt", Utils.ja),
+                            new Answer("fehlerteil-unbekannt", Utils.nein) //ende > hilfe, wie man das fehlerteil findet
+                    ),
+                    "andere-pc-teile"),
+            new Question("Welches Teil verursacht den Fehler?",
+                    List.of(
+                            new Answer("gpu", List.of("GPU", "Grafik", "Video", "Graphic")),
+                            new Answer("cpu", List.of("CPU", "Prozessor", "Processor")),
+                            new Answer("psu", List.of("PSU", "Netzteil", "Stromversorg")),
+                            new Answer("mainboard", List.of("Mainboard", "Motherboard")),
+                            new Answer("luefter", List.of("Lüfter", "Lüftung"))
+                    ),
+                    "fehlerteil-bekannt"),
             new Question("Verwendest du Windows oder Linux?",
                     List.of(
-                            new Answer("linux", List.of("linux")),
+                            new Answer("linux", List.of("linux")), // ende > kein support
                             new Answer("windows", List.of("windows", "microsoft"))
                     ),
                     "software"),
-            new Question("Gibt es Probleme mit dem Monitor oder einem anderen Teil?",
+            new Question("Gibt es Probleme mit dem Betriebssystem?",
                     List.of(
-                            new Answer("monitor", List.of("monitor", "bildschirm")),
-                            new Answer("anderes-pc-teil", List.of("GPU", "CPU", "andere", "PSU", "Prozessor", "Grafik", "Mainboard", "Motherboard"))
+                            new Answer("ja-betriebssystem", Utils.ja),
+                            new Answer("nein-betriebssystem", Utils.nein)
                     ),
-                    "hardware"),
-            new Question("Raucht es?",
+                    "windows"),
+            new Question("Hat das Problem mit einem Softwareupdate zu tun?",
                     List.of(
-                            new Answer("rauch-ja", Utils.ja),
-                            new Answer("rauch-nein", Utils.nein)
+                            new Answer("updateproblem", Utils.ja), //ende
+                            new Answer("kein-updateproblem", Utils.nein)
                     ),
-                    "anderes-pc-teil"),
-            new Question("Beschreibe das Problem deines Bildschirms etwas genauer.",
+                    "ja-betriebssystem"),
+            new Question("Gibt es Probleme beim Wechsel der Windowsversion (z.B. Windows 10 auf Windows 11)?",
                     List.of(
-                            new Answer("flackern", List.of("flacker")),
-                            new Answer("bild-gestoppt", List.of("stop", "standbild")),
-                            new Answer("schwarzbild", List.of("dunkel", "schwarz"))
+                            new Answer("windows-aktualisierung", Utils.ja), //ende
+                            new Answer("nicht-windows-aktualisierung", Utils.nein) //ende
                     ),
-                    "monitor"),
-            new Question("Bei welcher Software tritt das Problem auf?",
+                    "kein-updateproblem"),
+            new Question("Welche Software verursacht das Problem?",
                     List.of(
-                            new Answer("browser", List.of("Chrome", "Firefox", "Browser", "Edge", "Internet Explorer", "Opera")),
-                            new Answer("mc-office", List.of("Word", "Excel", "Powerpoint", "Outlook", "Office", "365")),
-                            new Answer("andere-software", List.of("andere", "keine"))
+                            new Answer("browser", List.of("Chrome", "Firefox", "Browser", "Edge", "Internet Explorer", "Opera")), //ende
+                            new Answer("mc-office", List.of("Word", "Excel", "Powerpoint", "Outlook", "Office", "365")), //ende
+                            new Answer("andere-software", List.of("andere", "keine")), //ende
+                            new Answer("andere-software", List.of("andere", "keine", "Adobe Creative Cloud", "AutoCAD", "Photoshop", "Illustrator")), //ende
+                            new Answer("sicherheit", List.of("Norton", "McAfee", "Kaspersky", "Avira", "Malwarebytes", "Windows Defender")), //ende
+                            new Answer("multimedia", List.of("VLC", "Adobe Premiere", "Audacity", "iTunes", "Spotify", "FL Studio")), //ende
+                            new Answer("office-tools", List.of("OneNote", "Access", "Google Workspace", "LibreOffice", "WPS Office", "Zoho Office")), //ende
+                            new Answer("datenbanken", List.of("MySQL", "PostgreSQL", "MongoDB", "SQLite", "Oracle", "Microsoft SQL Server")), //ende
+                            new Answer("projektmanagement", List.of("Jira", "Trello", "Asana", "Monday.com", "Basecamp", "Microsoft Project")), //ende
+                            new Answer("kommunikation", List.of("Slack", "Teams", "Zoom", "Skype", "Discord", "Telegram")) //ende
                     ),
-                    "windows")
+                    "nein-betriebssystem")
     );
     private static final List<String> prevAnswers = new ArrayList<>();
 
@@ -104,7 +162,7 @@ public class Main {
     }
 
     private static boolean checkPrerequisite(String prerequisite) {
-        if (prerequisite == null || prevAnswers.size() == 0) {
+        if (prerequisite == null || prevAnswers.isEmpty()) {
             return true;
         }
         return Objects.equals(prevAnswers.get(prevAnswers.size() - 1), prerequisite);
