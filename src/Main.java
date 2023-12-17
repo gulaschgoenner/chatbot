@@ -26,8 +26,8 @@ public class Main {
                     "desktop"),
             new Question("Funktioniert das Gerät nicht mehr seit du neue Hardware eingebaut hast?",
                     List.of(
-                            new Answer("ja-neue-hardware", Utils.ja),
-                            new Answer("nein-neue-hardware", Utils.nein) //ende
+                            new Answer("ja-neue-hardware", Utils.ja), //ende
+                            new Answer("nein-neue-hardware", Utils.nein)
                     ),
                     "hardware"),
             new Question("Hat dein Computer ungewöhnliche Geräusche gemacht?",
@@ -57,11 +57,11 @@ public class Main {
                     "andere-pc-teile"),
             new Question("Welches Teil verursacht den Fehler?",
                     List.of(
-                            new Answer("gpu", List.of("GPU", "Grafik", "Video", "Graphic")),
-                            new Answer("cpu", List.of("CPU", "Prozessor", "Processor")),
-                            new Answer("psu", List.of("PSU", "Netzteil", "Stromversorg")),
-                            new Answer("mainboard", List.of("Mainboard", "Motherboard")),
-                            new Answer("luefter", List.of("Lüfter", "Lüftung"))
+                            new Answer("gpu", List.of("GPU", "Grafik", "Video", "Graphic")), //ende
+                            new Answer("cpu", List.of("CPU", "Prozessor", "Processor")),//ende
+                            new Answer("psu", List.of("PSU", "Netzteil", "Stromversorg")),//ende
+                            new Answer("mainboard", List.of("Mainboard", "Motherboard")),//ende
+                            new Answer("luefter", List.of("Lüfter", "Lüftung"))//ende
                     ),
                     "fehlerteil-bekannt"),
             new Question("Verwendest du Windows oder Linux?",
@@ -91,15 +91,11 @@ public class Main {
             new Question("Welche Software verursacht das Problem?",
                     List.of(
                             new Answer("browser", List.of("Chrome", "Firefox", "Browser", "Edge", "Internet Explorer", "Opera")), //ende
-                            new Answer("mc-office", List.of("Word", "Excel", "Powerpoint", "Outlook", "Office", "365")), //ende
-                            new Answer("andere-software", List.of("andere", "keine")), //ende
-                            new Answer("andere-software", List.of("andere", "keine", "Adobe Creative Cloud", "AutoCAD", "Photoshop", "Illustrator")), //ende
+                            new Answer("mc-office", List.of("Word", "Excel", "Powerpoint", "Outlook", "365")), //ende
                             new Answer("sicherheit", List.of("Norton", "McAfee", "Kaspersky", "Avira", "Malwarebytes", "Windows Defender")), //ende
                             new Answer("multimedia", List.of("VLC", "Adobe Premiere", "Audacity", "iTunes", "Spotify", "FL Studio")), //ende
                             new Answer("office-tools", List.of("OneNote", "Access", "Google Workspace", "LibreOffice", "WPS Office", "Zoho Office")), //ende
-                            new Answer("datenbanken", List.of("MySQL", "PostgreSQL", "MongoDB", "SQLite", "Oracle", "Microsoft SQL Server")), //ende
-                            new Answer("projektmanagement", List.of("Jira", "Trello", "Asana", "Monday.com", "Basecamp", "Microsoft Project")), //ende
-                            new Answer("kommunikation", List.of("Slack", "Teams", "Zoom", "Skype", "Discord", "Telegram")) //ende
+                            new Answer("kommunikation", List.of("Slack", "Teams", "Zoom", "Skype", "Discord")) //ende
                     ),
                     "nein-betriebssystem")
     );
@@ -129,9 +125,17 @@ public class Main {
     }
 
     private static void getSolutions() {
-        // TODO
-        System.out.println(prevAnswers);
-        System.out.println("Starte das Gerät neu.");
+        if (userName.contains("debug") || userName.contains("obama")) {
+            System.out.println(prevAnswers);
+        }
+        String lastAnswer = prevAnswers.get(prevAnswers.size() - 1);
+        String solutions = Utils.solutions.get(lastAnswer);
+
+        if (solutions == null) {
+            solutions = Utils.standardSolution;
+        }
+
+        System.out.println("Chatbot: Hier sind einige Lösungsansätze für dein Problem.\n" + solutions);
     }
 
     private static void askQuestions(Scanner scanner) {
