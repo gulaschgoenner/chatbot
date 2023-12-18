@@ -1,11 +1,8 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     private static String userName;
-    public static List<Question> layers = List.of(
+    public static List<Question> tree = List.of(
             new Question("Benutzt du einen Laptop oder einen Desktop-PC?",
                     List.of(
                             new Answer("laptop", List.of("laptop", "notebook")),
@@ -102,6 +99,7 @@ public class Main {
     private static final List<String> prevAnswers = new ArrayList<>();
 
     public static void main(String[] args) {
+        validateTree();
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Hallo! Wie lautet dein Name?");
@@ -118,11 +116,38 @@ public class Main {
                 if (messageContainsFromList(userResponse, Utils.ja)) {
                     resetConversation();
                 } else {
-                    System.out.println("Chatbot: Tschüss! Bis zum nächsten Mal, " + userName + "!");
                     break;
                 }
             } else {
                 break;
+            }
+        }
+        System.out.println("Chatbot: Tschüss! Bis zum nächsten Mal, " + userName + "!");
+    }
+
+    private static void askQuestions(Scanner scanner) {
+        int question = prevAnswers.size();
+
+        while (tree.size() > question) {
+            if (checkPrerequisite(tree.get(question).getPrerequisite())) {
+                System.out.println("Chatbot: " + tree.get(question).getQuestion());
+
+                if (question < prevAnswers.size()) {
+                    question++;
+                    continue;
+                }
+
+                String userMessage = getUserMessage(scanner);
+
+                while (getAnswer(userMessage, tree.get(question).getAnswers()) == null) {
+                    System.out.println("Chatbot: Bitte gib eine genauere Antwort.");
+                    userMessage = getUserMessage(scanner);
+                }
+
+                prevAnswers.add(getAnswer(userMessage, tree.get(question).getAnswers()));
+                question++;
+            } else {
+                question++;
             }
         }
     }
@@ -159,33 +184,6 @@ public class Main {
             System.out.println("Chatbot: Unter dieser Nummer erreichst du unseren Service und kannst unsere professionelle Hilfe beanspruchen: 0521 16391643");
         }
         return fehlerBehoben;
-    }
-
-    private static void askQuestions(Scanner scanner) {
-        int question = prevAnswers.size();
-
-        while (layers.size() > question) {
-            if (checkPrerequisite(layers.get(question).getPrerequisite())) {
-                System.out.println("Chatbot: " + layers.get(question).getQuestion());
-
-                if (question < prevAnswers.size()) {
-                    question++;
-                    continue;
-                }
-
-                String userMessage = getUserMessage(scanner);
-
-                while (getAnswer(userMessage, layers.get(question).getAnswers()) == null) {
-                    System.out.println("Chatbot: Bitte gib eine genauere Antwort.");
-                    userMessage = getUserMessage(scanner);
-                }
-
-                prevAnswers.add(getAnswer(userMessage, layers.get(question).getAnswers()));
-                question++;
-            } else {
-                question++;
-            }
-        }
     }
 
     private static boolean checkPrerequisite(String prerequisite) {
@@ -226,5 +224,13 @@ public class Main {
 
     private static void resetConversation() {
         prevAnswers.clear();
+    }
+
+    private static void validateTree() {
+        List<String> prerequisites = tree.stream().map(Question::getPrerequisite).toList();
+        Set<String> uniqueSet = new HashSet<>(prerequisites);
+        if (uniqueSet.size() != prerequisites.size()) {
+            throw new RuntimeException("Antwortbaum ungültig");
+        }
     }
 }
