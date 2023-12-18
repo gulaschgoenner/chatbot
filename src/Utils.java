@@ -65,16 +65,17 @@ public class Utils {
                             new Answer("luefter", List.of("Lüfter", "Lüftung"))//ende
                     ),
                     "fehlerteil-bekannt"),
-            new Question("Verwendest du Windows oder Linux?",
+            new Question("Welches Betriebssystem verwendest du?",
                     List.of(
                             new Answer("linux", List.of("linux")), // ende > kein support
-                            new Answer("windows", List.of("windows", "microsoft"))
+                            new Answer("windows", List.of("windows", "microsoft")),
+                            new Answer("app-problem", List.of("mac", "apple"))
                     ),
                     "software"),
             new Question("Gibt es Probleme mit dem Betriebssystem?",
                     List.of(
                             new Answer("ja-betriebssystem", Utils.ja),
-                            new Answer("nein-betriebssystem", Utils.nein)
+                            new Answer("app-problem", Utils.nein)
                     ),
                     "windows"),
             new Question("Hat das Problem mit einem Softwareupdate zu tun?",
@@ -91,7 +92,9 @@ public class Utils {
                     "kein-updateproblem"),
             new Question("Welche Software verursacht das Problem?",
                     List.of(
-                            new Answer("browser", List.of("Chrome", "Firefox", "Browser", "Edge", "Internet Explorer", "Opera")), //ende
+                            new Answer("browser", List.of("Browser", "Edge", "Internet Explorer", "Opera", "Brave", "Chromium")), //ende
+                            new Answer("chrome", List.of("Chrome")), //ende
+                            new Answer("firefox", List.of("Firefox", "Mozilla")), //ende
                             new Answer("mc-office", List.of("Outlook", "OneNote", "365")), //ende
                             new Answer("mc-word", List.of("Word")), //ende
                             new Answer("mc-excel", List.of("Excel")), //ende
@@ -99,9 +102,9 @@ public class Utils {
                             new Answer("sicherheit", List.of("Norton", "McAfee", "Kaspersky", "Avira", "Malwarebytes", "Windows Defender")), //ende
                             new Answer("multimedia", List.of("VLC", "Adobe Premiere", "Audacity", "iTunes", "Spotify", "FL Studio")), //ende
                             new Answer("office-tools", List.of("Access", "Google Workspace", "LibreOffice", "WPS Office", "Zoho Office")), //ende
-                            new Answer("kommunikation", List.of("Slack", "Teams", "Zoom", "Skype", "Discord")) //ende
+                            new Answer("kommunikation", List.of("Slack", "Teams", "Zoom", "Skype", "Discord", "WhatsApp")) //ende
                     ),
-                    "nein-betriebssystem")
+                    "app-problem")
     );
     public static List<String> standardSolution = List.of("""
                     Neustart des Computers:
@@ -641,6 +644,83 @@ public class Utils {
                         Proxy-Einstellungen überprüfen:
                         Stelle sicher, dass deine Proxy-Einstellungen korrekt konfiguriert sind. Wenn du keinen Proxy benötigst, setze die Einstellungen auf "Automatisch erkennen".
                         """));
+        sols.put("chrome", List.of(
+                """
+                        Neustart des Browsers:
+                        Schließe Google Chrome und öffne ihn erneut, um mögliche Probleme zu beheben.
+                        """,
+                """
+                        Browser-Cache leeren:
+                        Lösche gespeicherte Cache-Daten in Google Chrome, um sicherzustellen, dass du die aktuelle Webseite lädst.
+                        """,
+                """
+                        Cookies löschen:
+                        Entferne fehlerhafte Cookies in Google Chrome und versuche die Aktion erneut.
+                        """,
+                """
+                        Deaktiviere Browsererweiterungen:
+                        Schalte alle Erweiterungen oder Plugins in Google Chrome aus, starte den Browser neu und überprüfe, ob das Problem weiterhin besteht.
+                        """,
+                """
+                        Aktualisiere den Browser:
+                        Stelle sicher, dass du die neueste Version von Google Chrome verwendest. Führe bei Bedarf ein Update über die Einstellungen oder die offizielle Website des Browsers durch.
+                        """,
+                """
+                        Überprüfe Internetverbindung:
+                        Kontrolliere deine Internetverbindung auf Stabilität und starte bei Bedarf den Router neu, um Lade- oder Anzeigefehler zu vermeiden.
+                        """,
+                """
+                        Browser-Add-ons deaktivieren:
+                        Schalte nacheinander alle Add-ons in Google Chrome aus, um festzustellen, ob eines davon das Problem verursacht.
+                        """,
+                """
+                        Antivirus- und Firewall-Einstellungen überprüfen:
+                        Überprüfe die Einstellungen deiner Antivirus- und Firewall-Software, da sie den Zugriff von Google Chrome auf bestimmte Websites blockieren könnten. Passe die Einstellungen gegebenenfalls an.
+                        """,
+                """
+                        Proxy-Einstellungen überprüfen:
+                        Stelle sicher, dass deine Proxy-Einstellungen in Google Chrome korrekt konfiguriert sind. Wenn kein Proxy benötigt wird, setze die Einstellungen auf "Automatisch erkennen".
+                        """
+        ));
+
+        sols.put("firefox", List.of(
+                """
+                        Neustart des Browsers:
+                        Starte Mozilla Firefox neu, um mögliche Probleme zu beheben.
+                        """,
+                """
+                        Browser-Cache leeren:
+                        Lösche gespeicherte Cache-Daten in Mozilla Firefox, um sicherzustellen, dass du die aktuelle Version der Webseite lädst.
+                        """,
+                """
+                        Cookies löschen:
+                        Entferne fehlerhafte Cookies in Mozilla Firefox und versuche die Aktion erneut.
+                        """,
+                """
+                        Deaktiviere Browsererweiterungen:
+                        Schalte alle Erweiterungen oder Plugins in Mozilla Firefox aus, starte den Browser neu und überprüfe, ob das Problem weiterhin besteht.
+                        """,
+                """
+                        Aktualisiere den Browser:
+                        Stelle sicher, dass du die neueste Version von Mozilla Firefox verwendest. Führe bei Bedarf ein Update über die Einstellungen oder die offizielle Website des Browsers durch.
+                        """,
+                """
+                        Überprüfe Internetverbindung:
+                        Kontrolliere deine Internetverbindung auf Stabilität und starte bei Bedarf den Router neu, um Lade- oder Anzeigefehler zu vermeiden.
+                        """,
+                """
+                        Browser-Add-ons deaktivieren:
+                        Schalte nacheinander alle Add-ons in Mozilla Firefox aus, um festzustellen, ob eines davon das Problem verursacht.
+                        """,
+                """
+                        Antivirus- und Firewall-Einstellungen überprüfen:
+                        Überprüfe die Einstellungen deiner Antivirus- und Firewall-Software, da sie den Zugriff von Mozilla Firefox auf bestimmte Websites blockieren könnten. Passe die Einstellungen gegebenenfalls an.
+                        """,
+                """
+                        Proxy-Einstellungen überprüfen:
+                        Stelle sicher, dass deine Proxy-Einstellungen in Mozilla Firefox korrekt konfiguriert sind. Wenn kein Proxy benötigt wird, setze die Einstellungen auf "Automatisch erkennen".
+                        """
+        ));
         sols.put("mc-office", List.of("""
                         Office-Anwendungen aktualisieren:
                         Stelle sicher, dass du die neueste Version von Microsoft Office installiert hast. Aktualisiere die Anwendungen über das Office-Update oder den Microsoft Store.
