@@ -6,6 +6,103 @@ public class Utils {
     public static List<String> nein = List.of("nein", "no", "nicht");
     public static Map<String, List<String>> solutions;
 
+    public static List<Question> tree = List.of(
+            new Question("Benutzt du einen Laptop oder einen Desktop-PC?",
+                    List.of(
+                            new Answer("laptop", List.of("laptop", "notebook")),
+                            new Answer("desktop", List.of("desktop", "pc", "computer"))
+                    ),
+                    null),
+            new Question("Ist dein Problem mit der Hardware oder der Software verbunden?",
+                    List.of(
+                            new Answer("hardware", List.of("hardware")),
+                            new Answer("software", List.of("software"))
+                    ),
+                    "laptop"),
+            new Question("Ist dein Problem mit der Hardware oder der Software verbunden?",
+                    List.of(
+                            new Answer("hardware", List.of("hardware")),
+                            new Answer("software", List.of("software"))
+                    ),
+                    "desktop"),
+            new Question("Funktioniert das Gerät nicht mehr seit du neue Hardware eingebaut hast?",
+                    List.of(
+                            new Answer("ja-neue-hardware", Utils.ja), //ende
+                            new Answer("nein-neue-hardware", Utils.nein)
+                    ),
+                    "hardware"),
+            new Question("Hat dein Computer ungewöhnliche Geräusche gemacht?",
+                    List.of(
+                            new Answer("ja-geraeusche", Utils.ja), //ende
+                            new Answer("nein-geraeusche", Utils.nein)
+                    ),
+                    "nein-neue-hardware"),
+            new Question("Wird nicht das richtige Bild auf dem Monitor angezeigt, obwohl das angeschlossene Gerät eingeschaltet ist?",
+                    List.of(
+                            new Answer("monitor", Utils.ja),
+                            new Answer("andere-pc-teile", Utils.nein)
+                    ),
+                    "nein-geraeusche"),
+            new Question("Beschreibe dein Problem genauer? Was wird auf dem Monitor angezeigt.",
+                    List.of(
+                            new Answer("flackern", List.of("flacker")), //ende
+                            new Answer("bild-gestoppt", List.of("stop", "standbild")),//ende
+                            new Answer("schwarzbild", List.of("dunkel", "schwarz"))//ende
+                    ),
+                    "monitor"),
+            new Question("Weißt du, welches Teil den Fehler verursacht?",
+                    List.of(
+                            new Answer("fehlerteil-bekannt", Utils.ja),
+                            new Answer("fehlerteil-unbekannt", Utils.nein) //ende > hilfe, wie man das fehlerteil findet
+                    ),
+                    "andere-pc-teile"),
+            new Question("Welches Teil verursacht den Fehler?",
+                    List.of(
+                            new Answer("gpu", List.of("GPU", "Grafik", "Video", "Graphic")), //ende
+                            new Answer("cpu", List.of("CPU", "Prozessor", "Processor")),//ende
+                            new Answer("psu", List.of("PSU", "Netzteil", "Stromversorg")),//ende
+                            new Answer("mainboard", List.of("Mainboard", "Motherboard")),//ende
+                            new Answer("luefter", List.of("Lüfter", "Lüftung"))//ende
+                    ),
+                    "fehlerteil-bekannt"),
+            new Question("Verwendest du Windows oder Linux?",
+                    List.of(
+                            new Answer("linux", List.of("linux")), // ende > kein support
+                            new Answer("windows", List.of("windows", "microsoft"))
+                    ),
+                    "software"),
+            new Question("Gibt es Probleme mit dem Betriebssystem?",
+                    List.of(
+                            new Answer("ja-betriebssystem", Utils.ja),
+                            new Answer("nein-betriebssystem", Utils.nein)
+                    ),
+                    "windows"),
+            new Question("Hat das Problem mit einem Softwareupdate zu tun?",
+                    List.of(
+                            new Answer("updateproblem", Utils.ja), //ende
+                            new Answer("kein-updateproblem", Utils.nein)
+                    ),
+                    "ja-betriebssystem"),
+            new Question("Gibt es Probleme beim Wechsel der Windowsversion (z.B. Windows 10 auf Windows 11)?",
+                    List.of(
+                            new Answer("windows-aktualisierung", Utils.ja), //ende
+                            new Answer("nicht-windows-aktualisierung", Utils.nein) //ende
+                    ),
+                    "kein-updateproblem"),
+            new Question("Welche Software verursacht das Problem?",
+                    List.of(
+                            new Answer("browser", List.of("Chrome", "Firefox", "Browser", "Edge", "Internet Explorer", "Opera")), //ende
+                            new Answer("mc-office", List.of("Outlook", "OneNote", "365")), //ende
+                            new Answer("mc-word", List.of("Word")), //ende
+                            new Answer("mc-excel", List.of("Excel")), //ende
+                            new Answer("mc-powerpoint", List.of("Powerpoint")), //ende
+                            new Answer("sicherheit", List.of("Norton", "McAfee", "Kaspersky", "Avira", "Malwarebytes", "Windows Defender")), //ende
+                            new Answer("multimedia", List.of("VLC", "Adobe Premiere", "Audacity", "iTunes", "Spotify", "FL Studio")), //ende
+                            new Answer("office-tools", List.of("Access", "Google Workspace", "LibreOffice", "WPS Office", "Zoho Office")), //ende
+                            new Answer("kommunikation", List.of("Slack", "Teams", "Zoom", "Skype", "Discord")) //ende
+                    ),
+                    "nein-betriebssystem")
+    );
     public static List<String> standardSolution = List.of("""
                     Neustart des Computers:
                     Oft können viele Probleme durch einen einfachen Neustart behoben werden. Dies ermöglicht es dem Betriebssystem und den Programmen, sich neu zu initialisieren.
@@ -711,6 +808,102 @@ public class Utils {
                 """
                         Aktualisierung von Treibern:
                         Stellen Sie sicher, dass Ihre Audio- und Videotreiber auf dem neuesten Stand sind. Veraltete Treiber können zu Kompatibilitätsproblemen führen.
+                        """));
+        sols.put("mc-excel", List.of("""
+                        Überprüfe die Formeln:
+                        Fehler in Excel können häufig durch fehlerhafte Formeln verursacht werden. Stelle sicher, dass alle Formeln korrekt eingegeben sind und keine Bezugsfehler enthalten. Überprüfe auch, ob Zellbezüge auf nicht vorhandene Daten verweisen.
+                        """,
+                """
+                        Datenüberprüfung:
+                        Wenn du Daten aus externen Quellen importierst, überprüfe die Daten auf mögliche Fehler. Unerwartete Werte oder Sonderzeichen können zu Fehlern führen. Bereinige die Daten und importiere sie erneut.
+                        """,
+                """
+                        Zellformat überprüfen:
+                        Manchmal führen falsche Zellformate zu Fehlern. Stelle sicher, dass die Zellen das richtige Format für die enthaltenen Daten haben. Datum, Uhrzeit oder Text sollten korrekt formatiert sein.
+                        """,
+                """
+                        Überprüfe bedingte Formatierung:
+                        Fehler können auch durch falsch konfigurierte bedingte Formatierungen auftreten. Gehe die bedingten Formatierungsregeln durch und korrigiere sie bei Bedarf.
+                        """,
+                """
+                        Add-Ins deaktivieren:
+                        Deaktiviere temporär alle Excel-Add-Ins, um zu sehen, ob ein Add-In für die Fehler verantwortlich ist. Wenn der Fehler verschwindet, aktiviere die Add-Ins einzeln wieder und identifiziere so den Verursacher.
+                        """,
+                """
+                        Excel-Version überprüfen:
+                        Stelle sicher, dass du die richtige Version von Excel verwendest und dass dein Arbeitsblatt mit dieser Version kompatibel ist. Inkompatibilitäten können zu Fehlern führen.
+                        """,
+                """
+                        Reparaturfunktion nutzen:
+                        Verwende die integrierte Reparaturfunktion von Excel, um beschädigte Dateien zu reparieren. Öffne Excel, gehe zu "Datei" > "Optionen" > "Ressourcen" > "Diagnose durchführen".
+                        """,
+                """
+                        Neustart durchführen:
+                        Manchmal können temporäre Probleme durch einen Neustart behoben werden. Schließe Excel und starte es erneut, um zu sehen, ob der Fehler weiterhin besteht.
+                        """));
+        sols.put("mc-powerpoint", List.of("""
+                        Überprüfe die Folienmaster:
+                        Fehler in PowerPoint können durch Probleme im Folienmaster verursacht werden. Stelle sicher, dass der Folienmaster korrekt konfiguriert ist, um einheitliche Formatierungen zu gewährleisten.
+                        """,
+                """
+                        Grafiken und Multimedia überprüfen:
+                        Probleme können auftreten, wenn Grafiken oder Multimedia-Elemente in die Präsentation eingefügt werden. Stelle sicher, dass die Dateien zugänglich und korrekt verknüpft sind.
+                        """,
+                """
+                        Überprüfe Übergänge und Animationen:
+                        Fehler können durch inkorrekte Übergänge oder Animationen verursacht werden. Überprüfe diese Elemente und stelle sicher, dass sie ordnungsgemäß konfiguriert sind.
+                        """,
+                """
+                        Präsentationsformate überprüfen:
+                        Stelle sicher, dass das Präsentationsformat mit der verwendeten PowerPoint-Version kompatibel ist. Inkompatibilitäten können zu Anzeigefehlern führen.
+                        """,
+                """
+                        Überprüfe die Bildschirmauflösung:
+                        Unerwartete Darstellungsprobleme können auf eine falsche Bildschirmauflösung zurückzuführen sein. Stelle sicher, dass die Auflösung den Anforderungen der Präsentation entspricht.
+                        """,
+                """
+                        Präsentation in den Folien sortieren:
+                        Fehler können auftreten, wenn die Reihenfolge der Folien durcheinander geraten ist. Überprüfe die Sortierung der Folien und ordne sie gegebenenfalls neu an.
+                        """,
+                """
+                        Makros und Add-Ins deaktivieren:
+                        Deaktiviere vorübergehend alle Makros und Add-Ins, um zu sehen, ob sie für die Fehler verantwortlich sind. Aktiviere sie dann einzeln wieder und identifiziere so den Verursacher.
+                        """,
+                """
+                        Reparaturfunktion nutzen:
+                        Verwende die integrierte Reparaturfunktion von PowerPoint, um beschädigte Präsentationen zu reparieren. Öffne PowerPoint, gehe zu "Datei" > "Optionen" > "Ressourcen" > "Diagnose durchführen".
+                        """));
+        sols.put("mc-word", List.of("""
+                        Überprüfe die Formatierung:
+                        Fehler in Word können durch inkorrekte Formatierungen entstehen. Stelle sicher, dass Absatz- und Zeichenformatierungen korrekt angewendet sind, um unerwartetes Verhalten zu vermeiden.
+                        """,
+                """
+                        Überprüfe eingefügte Objekte:
+                        Probleme können auftreten, wenn Bilder oder andere Objekte in das Dokument eingefügt werden. Stelle sicher, dass die Objekte korrekt platziert sind und keine Konflikte verursachen.
+                        """,
+                """
+                        Korrekte Verwendung von Abschnittswechsel:
+                        Wenn dein Dokument Abschnitte enthält, überprüfe die Verwendung von Abschnittswechseln. Fehlerhafte Abschnittswechsel können zu Layoutproblemen führen.
+                        """,
+                """
+                        Verwendung von Vorlagen überprüfen:
+                        Wenn du eine Vorlage für dein Dokument verwendest, überprüfe, ob die Vorlage korrekt konfiguriert ist. Unerwartete Formatierungen können auf eine falsch konfigurierte Vorlage zurückzuführen sein.
+                        """,
+                """
+                        Speicherort überprüfen:
+                        Stelle sicher, dass das Dokument an einem sicheren und zugänglichen Speicherort gespeichert ist. Probleme können auftreten, wenn das Dokument auf einen nicht erreichbaren Pfad verweist.
+                        """,
+                """
+                        Makros und Add-Ins deaktivieren:
+                        Deaktiviere vorübergehend alle Makros und Add-Ins, um zu sehen, ob sie für die Fehler verantwortlich sind. Aktiviere sie dann einzeln wieder und identifiziere so den Verursacher.
+                        """,
+                """
+                        Dateiformat überprüfen:
+                        Überprüfe das Dateiformat deines Dokuments. Inkompatibilitäten zwischen verschiedenen Word-Versionen können zu Fehlern führen. Speichere das Dokument gegebenenfalls in einem anderen Format.
+                        """,
+                """
+                        Reparaturfunktion nutzen:
+                        Verwende die integrierte Reparaturfunktion von Word, um beschädigte Dateien zu reparieren. Öffne Word, gehe zu "Datei" > "Optionen" > "Ressourcen" > "Diagnose durchführen".
                         """));
         solutions = sols;
     }

@@ -2,100 +2,7 @@ import java.util.*;
 
 public class Main {
     private static String userName;
-    public static List<Question> tree = List.of(
-            new Question("Benutzt du einen Laptop oder einen Desktop-PC?",
-                    List.of(
-                            new Answer("laptop", List.of("laptop", "notebook")),
-                            new Answer("desktop", List.of("desktop", "pc", "computer"))
-                    ),
-                    null),
-            new Question("Ist dein Problem mit der Hardware oder der Software verbunden?",
-                    List.of(
-                            new Answer("hardware", List.of("hardware")),
-                            new Answer("software", List.of("software"))
-                    ),
-                    "laptop"),
-            new Question("Ist dein Problem mit der Hardware oder der Software verbunden?",
-                    List.of(
-                            new Answer("hardware", List.of("hardware")),
-                            new Answer("software", List.of("software"))
-                    ),
-                    "desktop"),
-            new Question("Funktioniert das Gerät nicht mehr seit du neue Hardware eingebaut hast?",
-                    List.of(
-                            new Answer("ja-neue-hardware", Utils.ja), //ende
-                            new Answer("nein-neue-hardware", Utils.nein)
-                    ),
-                    "hardware"),
-            new Question("Hat dein Computer ungewöhnliche Geräusche gemacht?",
-                    List.of(
-                            new Answer("ja-geraeusche", Utils.ja), //ende
-                            new Answer("nein-geraeusche", Utils.nein)
-                    ),
-                    "nein-neue-hardware"),
-            new Question("Wird nicht das richtige Bild auf dem Monitor angezeigt, obwohl das angeschlossene Gerät eingeschaltet ist?",
-                    List.of(
-                            new Answer("monitor", Utils.ja),
-                            new Answer("andere-pc-teile", Utils.nein)
-                    ),
-                    "nein-geraeusche"),
-            new Question("Beschreibe dein Problem genauer? Was wird auf dem Monitor angezeigt.",
-                    List.of(
-                            new Answer("flackern", List.of("flacker")), //ende
-                            new Answer("bild-gestoppt", List.of("stop", "standbild")),//ende
-                            new Answer("schwarzbild", List.of("dunkel", "schwarz"))//ende
-                    ),
-                    "monitor"),
-            new Question("Weißt du, welches Teil den Fehler verursacht?",
-                    List.of(
-                            new Answer("fehlerteil-bekannt", Utils.ja),
-                            new Answer("fehlerteil-unbekannt", Utils.nein) //ende > hilfe, wie man das fehlerteil findet
-                    ),
-                    "andere-pc-teile"),
-            new Question("Welches Teil verursacht den Fehler?",
-                    List.of(
-                            new Answer("gpu", List.of("GPU", "Grafik", "Video", "Graphic")), //ende
-                            new Answer("cpu", List.of("CPU", "Prozessor", "Processor")),//ende
-                            new Answer("psu", List.of("PSU", "Netzteil", "Stromversorg")),//ende
-                            new Answer("mainboard", List.of("Mainboard", "Motherboard")),//ende
-                            new Answer("luefter", List.of("Lüfter", "Lüftung"))//ende
-                    ),
-                    "fehlerteil-bekannt"),
-            new Question("Verwendest du Windows oder Linux?",
-                    List.of(
-                            new Answer("linux", List.of("linux")), // ende > kein support
-                            new Answer("windows", List.of("windows", "microsoft"))
-                    ),
-                    "software"),
-            new Question("Gibt es Probleme mit dem Betriebssystem?",
-                    List.of(
-                            new Answer("ja-betriebssystem", Utils.ja),
-                            new Answer("nein-betriebssystem", Utils.nein)
-                    ),
-                    "windows"),
-            new Question("Hat das Problem mit einem Softwareupdate zu tun?",
-                    List.of(
-                            new Answer("updateproblem", Utils.ja), //ende
-                            new Answer("kein-updateproblem", Utils.nein)
-                    ),
-                    "ja-betriebssystem"),
-            new Question("Gibt es Probleme beim Wechsel der Windowsversion (z.B. Windows 10 auf Windows 11)?",
-                    List.of(
-                            new Answer("windows-aktualisierung", Utils.ja), //ende
-                            new Answer("nicht-windows-aktualisierung", Utils.nein) //ende
-                    ),
-                    "kein-updateproblem"),
-            new Question("Welche Software verursacht das Problem?",
-                    List.of(
-                            new Answer("browser", List.of("Chrome", "Firefox", "Browser", "Edge", "Internet Explorer", "Opera")), //ende
-                            new Answer("mc-office", List.of("Word", "Excel", "Powerpoint", "Outlook", "365")), //ende
-                            new Answer("sicherheit", List.of("Norton", "McAfee", "Kaspersky", "Avira", "Malwarebytes", "Windows Defender")), //ende
-                            new Answer("multimedia", List.of("VLC", "Adobe Premiere", "Audacity", "iTunes", "Spotify", "FL Studio")), //ende
-                            new Answer("office-tools", List.of("OneNote", "Access", "Google Workspace", "LibreOffice", "WPS Office", "Zoho Office")), //ende
-                            new Answer("kommunikation", List.of("Slack", "Teams", "Zoom", "Skype", "Discord")) //ende
-                    ),
-                    "nein-betriebssystem")
-    );
+
     private static final List<String> prevAnswers = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -128,9 +35,9 @@ public class Main {
     private static void askQuestions(Scanner scanner) {
         int question = prevAnswers.size();
 
-        while (tree.size() > question) {
-            if (checkPrerequisite(tree.get(question).getPrerequisite())) {
-                System.out.println("Chatbot: " + tree.get(question).getQuestion());
+        while (Utils.tree.size() > question) {
+            if (checkPrerequisite(Utils.tree.get(question).getPrerequisite())) {
+                System.out.println("Chatbot: " + Utils.tree.get(question).getQuestion());
 
                 if (question < prevAnswers.size()) {
                     question++;
@@ -139,12 +46,12 @@ public class Main {
 
                 String userMessage = getUserMessage(scanner);
 
-                while (getAnswer(userMessage, tree.get(question).getAnswers()) == null) {
+                while (getAnswer(userMessage, Utils.tree.get(question).getAnswers()) == null) {
                     System.out.println("Chatbot: Bitte gib eine genauere Antwort.");
                     userMessage = getUserMessage(scanner);
                 }
 
-                prevAnswers.add(getAnswer(userMessage, tree.get(question).getAnswers()));
+                prevAnswers.add(getAnswer(userMessage, Utils.tree.get(question).getAnswers()));
                 question++;
             } else {
                 question++;
@@ -227,10 +134,14 @@ public class Main {
     }
 
     private static void validateTree() {
-        List<String> prerequisites = tree.stream().map(Question::getPrerequisite).toList();
-        Set<String> uniqueSet = new HashSet<>(prerequisites);
-        if (uniqueSet.size() != prerequisites.size()) {
-            throw new RuntimeException("Antwortbaum ungültig");
+        List<String> prerequisites = Utils.tree.stream().map(Question::getPrerequisite).toList();
+        Set<String> uniqueLinks = new HashSet<>(prerequisites);
+        if (uniqueLinks.size() != prerequisites.size()) {
+            throw new RuntimeException("Antwortbaum enthält Dopplungen");
+        }
+        uniqueLinks.remove(null);
+        if (uniqueLinks.containsAll(Utils.solutions.keySet())) {
+            throw new RuntimeException("Lösungsschlüssel nicht gefunden");
         }
     }
 }
