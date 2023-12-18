@@ -78,7 +78,7 @@ public class Main {
         for (String solution : solutions) {
             System.out.println("Chatbot: " + solution);
 
-            System.out.println("Chatbot: " + "Hat das geholfen?");
+            System.out.println("Chatbot: " + weitereHilfeNoetigAbfrage());
             String weitereHilfeNoetig = getUserMessage(scanner);
             if (messageContainsFromList(weitereHilfeNoetig, Utils.ja)) {
                 fehlerBehoben = true;
@@ -143,5 +143,9 @@ public class Main {
         if (uniqueLinks.containsAll(Utils.solutions.keySet())) {
             throw new RuntimeException("Lösungsschlüssel nicht gefunden");
         }
+    }
+
+    private static String weitereHilfeNoetigAbfrage() {
+        return Utils.weitereHilfeNoetig.get(new Random().nextInt(Utils.weitereHilfeNoetig.size()));
     }
 }
