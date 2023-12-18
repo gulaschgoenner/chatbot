@@ -110,32 +110,55 @@ public class Main {
 
         while (true) {
             askQuestions(scanner);
-            getSolutions();
-            System.out.println("Hast du ein weiteres Problem?");
-            String userResponse = getUserMessage(scanner);
+            boolean problemSolved = getSolutions(scanner);
 
-            if (messageContainsFromList(userResponse, Utils.ja)) {
-                resetConversation();
+            if (problemSolved) {
+                System.out.println("Chatbot: Benötigst du weitere Hilfe?");
+                String userResponse = getUserMessage(scanner);
+                if (messageContainsFromList(userResponse, Utils.ja)) {
+                    resetConversation();
+                } else {
+                    System.out.println("Chatbot: Tschüss! Bis zum nächsten Mal, " + userName + "!");
+                    break;
+                }
             } else {
-                System.out.println("Chatbot: Tschüss! Bis zum nächsten Mal, " + userName + "!");
                 break;
             }
-
         }
     }
 
-    private static void getSolutions() {
+    private static boolean getSolutions(Scanner scanner) {
         if (userName.contains("debug") || userName.contains("obama")) {
             System.out.println(prevAnswers);
         }
         String lastAnswer = prevAnswers.get(prevAnswers.size() - 1);
-        String solutions = Utils.solutions.get(lastAnswer);
+        List<String> solutions = Utils.solutions.get(lastAnswer);
 
         if (solutions == null) {
+            System.out.println("Chatbot: Ich konnte leider keine spezifische Lösung finden, hier sind einige allgemeine Hilfen.");
             solutions = Utils.standardSolution;
+        } else {
+            System.out.println("Chatbot: Ich habe einige Lösungsansätze für dein Problem gefunden.");
         }
 
-        System.out.println("Chatbot: Hier sind einige Lösungsansätze für dein Problem.\n" + solutions);
+        // Lösungen zurückgeben
+        boolean fehlerBehoben = false;
+        for (String solution : solutions) {
+            System.out.println("Chatbot: " + solution);
+
+            System.out.println("Chatbot: " + "Hat das geholfen?");
+            String weitereHilfeNoetig = getUserMessage(scanner);
+            if (messageContainsFromList(weitereHilfeNoetig, Utils.ja)) {
+                fehlerBehoben = true;
+                break;
+            }
+        }
+
+        // Falls nötig Telefonnr als weitere Hilfe anbieten
+        if (!fehlerBehoben) {
+            System.out.println("Chatbot: Unter dieser Nummer erreichst du unseren Service und kannst unsere professionelle Hilfe beanspruchen: 0521 16391643");
+        }
+        return fehlerBehoben;
     }
 
     private static void askQuestions(Scanner scanner) {
