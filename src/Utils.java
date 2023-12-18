@@ -163,7 +163,7 @@ public class Utils {
                         """,
                 """
                         Softwarekonflikte:
-                        Manchmal kann die Installation neuer Hardware zu Softwarekonflikten führen. Dies könnte durch bereits installierte Programme oder Betriebssysteme verursacht werden. 
+                        Manchmal kann die Installation neuer Hardware zu Softwarekonflikten führen. Dies könnte durch bereits installierte Programme oder Betriebssysteme verursacht werden.
                          """));
         sols.put("ja-geraeusche", List.of("""
                         Überprüfe die Lüfter:
@@ -217,11 +217,11 @@ public class Utils {
                         In einigen Anwendungen, wie Webbrowsern, kannst du die Hardwarebeschleunigung deaktivieren. Dies kann helfen, wenn das Flackern in bestimmten Anwendungen auftritt.
                         """,
                 """
-                        Überprüfe auf Magnetfelder und elektronische Störungen:                
+                        Überprüfe auf Magnetfelder und elektronische Störungen:
                         Stelle sicher, dass keine magnetischen Felder in der Nähe des Monitors sind, da diese zu Flackern führen können. Elektronische Störungen von anderen elektronischen Geräten könnten ebenfalls ein Problem sein.
                         """,
                 """
-                        Ändere die Bildschirmauflösung:               
+                        Ändere die Bildschirmauflösung:
                         Experimentiere mit verschiedenen Bildschirmauflösungen, um zu sehen, ob das Flackern auftritt, wenn du die Auflösung änderst.
                         """,
                 """
@@ -345,23 +345,23 @@ public class Utils {
                         Bestimmte Betriebssysteme benötigen möglicherweise spezielle Konfigurationen oder Treiber für neue Hardware. Stelle sicher, dass das Betriebssystem die neue Hardware unterstützt und die erforderlichen Updates installiert sind.
                         """));
         sols.put("updateproblem", List.of("""
-                        Treiber aktualisieren: 
+                        Treiber aktualisieren:
                         Stelle sicher, dass deine Hardwaretreiber auf dem neuesten Stand sind.
                         """,
                 """
-                        Windows Update wiederholen: 
+                        Windows Update wiederholen:
                         Manchmal kann ein erneuter Versuch, das Update zu installieren, das Problem beheben.
                         """,
                 """
-                        Systemwiederherstellung: 
+                        Systemwiederherstellung:
                         Du kannst versuchen, das System auf einen vorherigen Zustand zurückzusetzen, wenn Probleme nach einem Update auftreten.
                         """,
                 """
-                        Überprüfe die Windows-Ereignisanzeige: 
+                        Überprüfe die Windows-Ereignisanzeige:
                         Hier findest du detaillierte Informationen zu Fehlern und Warnungen nach einem Update.
                         """,
                 """
-                        Deaktiviere vorübergehend Sicherheitssoftware: 
+                        Deaktiviere vorübergehend Sicherheitssoftware:
                         Antivirenprogramme und Firewall können Updates beeinträchtigen. Deaktiviere sie vorübergehend, um zu prüfen, ob dies das Problem behebt.
                         """));
         sols.put("windows-aktualisierung", List.of("""
