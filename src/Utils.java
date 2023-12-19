@@ -125,12 +125,8 @@ public class Utils {
             """
                     Online-Foren und Support durchsuchen:
                     Durchsuche Foren und Support-Websites, um zu sehen, ob andere Benutzer ähnliche Probleme hatten und Lösungen gefunden haben.
-                    """,
-            """
-                    Professionelle Hilfe in Anspruch nehmen:
-                    Wenn du nicht in der Lage bist, das Problem selbst zu lösen, ziehe in Erwägung, professionelle Hilfe in Anspruch zu nehmen. Dies könnte den Kontakt mit dem technischen Support des Herstellers oder einem Fachmann vor Ort einschließen.
                     """);
-    public static List<String> weitereHilfeNoetig = List.of("Hat das geholfen?", "Benötigst du weitere Hilfe?", "Kannst du den Fehler damit beheben?", "Ist das Problem behoben?");
+    public static List<String> weitereHilfeNoetig = List.of("Hat das geholfen?", "Kannst du den Fehler damit beheben?", "Ist das Problem behoben?");
 
     static {
         HashMap<String, List<String>> sols = new HashMap<>();

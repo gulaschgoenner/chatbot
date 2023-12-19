@@ -15,7 +15,7 @@ public class Main {
 
         while (true) {
             askQuestions(scanner);
-            boolean problemSolved = getSolutions(scanner);
+            boolean problemSolved = giveAnswers(scanner);
 
             if (problemSolved) {
                 System.out.println("Chatbot: Benötigst du weitere Hilfe?");
@@ -59,7 +59,7 @@ public class Main {
         }
     }
 
-    private static boolean getSolutions(Scanner scanner) {
+    private static boolean giveAnswers(Scanner scanner) {
         if (userName.contains("debug") || userName.contains("obama")) {
             System.out.println(prevAnswers);
         }
